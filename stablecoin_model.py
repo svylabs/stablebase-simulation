@@ -53,10 +53,19 @@ class StablecoinModel(Model):
                 "Collateral Pool": "collateral_pool",
                 "Current Shielding Rate": "current_shielding_rate",
                 "Collateral Price": "collateral_value"
+            },
+            agent_reporters={
+                "AgentType": lambda agent: type(agent).__name__,  # Agent type (RateGovernor, NormalUser, etc.)
+                #"AgentID": lambda agent: getattr(agent, "unique_id"),
+                "Debt": lambda agent: getattr(agent, "debt", 0),
+                "Collateral": lambda agent: getattr(agent, "collateral", 0),
+                "RedemptionProtection": lambda agent: getattr(agent, "redemption_protection", 0),
+                "Stake": lambda agent: getattr(agent, "stake", 0) if isinstance(agent, RateGovernorAgent) else 0,
             }
         )
 
     def step(self):
+        self.schedule.step()
         # Collect data
         self.datacollector.collect(self)
 
