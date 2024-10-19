@@ -7,11 +7,13 @@
 
 ## Initial Results
 
-Setting:
+**Simulation Setup**
 
-Rate Governors: 500, collateral size: 10-200
-Normal Users: 4000, collateral size: 0.3 - 10
-Third party pool depositors: 2000
+- Rate Governors: 500, collateral size: 10-200
+- Normal Users: 4000, collateral size: 0.3 - 10
+- Third party pool depositors: 2000
+
+Liquidations / Redemptions are not considered
 
 ![Supply growth curve](./simulation_results/supply-debt.png)
 
