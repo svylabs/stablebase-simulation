@@ -74,6 +74,7 @@ class RateGovernorAgent(BaseAgent):
         self.stake = (self.reserve_ratio * self.debt) / 100
         self.security_deposit = 0.005 * self.stake  # 0.5% security deposit
         self.model.total_supply += self.debt
+        self.model.rate_governor_debt += self.debt
         self.model.update_reserve_pool_stake_governor(self.stake)
         self.model.collateral_pool += self.collateral
 

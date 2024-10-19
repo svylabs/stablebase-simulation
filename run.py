@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 
 # Initialize the model
 model = StablecoinModel(
-    N_rate_governors=100,
-    N_users=2000,
-    N_depositors=300,
+    N_rate_governors=500,
+    N_users=4000,
+    N_depositors=2000,
     N_liquidators=10
 )
 
@@ -17,12 +17,9 @@ for i in range(300):
 data = model.datacollector.get_model_vars_dataframe()
 
 # Plot total supply over time
-'''
-data["Total Supply"].plot()
-plt.title("Total Stablecoin Supply Over Time")
-plt.xlabel("Time")
-plt.ylabel("Total Supply")
+
 #plt.show()
+'''
 
 
 # Plot reserve pool over time
@@ -46,6 +43,9 @@ plt.ylabel("Reserve Pool")
 #plt.ylabel("Collateral Price")
 #plt.show()
 
+data["total_supply"].plot()
+data["rate_governor_debt"].plot()
+data["reserve_pool_stake_governors"].plot()
 data["normal_user_debt"].plot()
 data["total_fee_paid"].plot()
 plt.title("Total debt of normal users over time")
@@ -77,7 +77,7 @@ plt.show()
 
 data["yield_rate_governors"].plot()
 data["yield_thirdparty_depositor_agents"].plot()
-plt.title("Yield Over Time")
+plt.title("Total Yield Over Time")
 plt.xlabel("Time")
 plt.ylabel("Yield")
 plt.yscale("log")
@@ -88,8 +88,7 @@ data["shielding_rates"].plot()
 data["stablecoin_price"].plot()
 plt.title("Collateral Price / Shielding Rates Over Time")
 plt.xlabel("Time")
-plt.ylabel("Shielding Rates")
-plt.yscale("log")
+plt.ylabel("Price / Shielding Rates")
 plt.legend()
 plt.show()
 

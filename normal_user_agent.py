@@ -36,7 +36,7 @@ class NormalUserAgent(BaseAgent):
                 renewal_fee = self.debt *  (total_shielding_rate / 12) * protection_months
                 self.redemption_protection += renewal_fee
                 self.shielding_rate_paid = total_shielding_rate
-                self.model.total_fee_paid += renewal_fee
+                #self.model.total_fee_paid += renewal_fee
                 self.model.distribute_shielding_fees(renewal_fee)
                 self.protection_duration = protection_months * 30
                 # Adjust debt accordingly
@@ -62,7 +62,7 @@ class NormalUserAgent(BaseAgent):
         self.shielding_rate_paid = total_shielding_rate
         protection_months = random.randint(1, 4)
         shielding_fee = self.debt * (total_shielding_rate / 12) * protection_months
-        self.model.total_fee_paid += shielding_fee
+        #self.model.total_fee_paid += shielding_fee
         self.protection_duration = protection_months * 30
         self.model.distribute_shielding_fees(shielding_fee)
 

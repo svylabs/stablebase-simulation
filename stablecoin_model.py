@@ -16,6 +16,7 @@ class StablecoinModel(Model):
         self.reserve_pool_stake_thirdparty_depositors = 0
         self.collateral_pool = 0
         self.total_supply = 0
+        self.rate_governor_debt = 0
         self.collateral_value = 60000  # Assume collateral value starts at 1
         self.collateralization_ratio = 1.5  # 150% collateralization
         self.normal_user_debt = 0
@@ -58,9 +59,10 @@ class StablecoinModel(Model):
 
         self.datacollector = DataCollector(
             model_reporters={
-                "Total Supply": "total_supply",
+                "total_supply": "total_supply",
+                "rate_governor_debt": "rate_governor_debt",
                 "Reserve Pool": "reserve_pool",
-                "Collateral Pool": "collateral_pool",
+                "total_collateral": "collateral_pool",
                 "Current Shielding Rate": "current_shielding_rate",
                 "Collateral Price": "collateral_value",
                 "shielding_rates": "current_shielding_rate",
@@ -134,6 +136,7 @@ class StablecoinModel(Model):
             self.current_shielding_rate = sum(weighted_rates) / total_stake
 
     def distribute_shielding_fees(self, shielding_fees):
+        self.total_fee_paid += shielding_fees
         # Distribute shielding fees among rate governors
         rate_governors = [agent for agent in self.schedule.agents if isinstance(agent, RateGovernorAgent)]
         total_stake = self.reserve_pool
