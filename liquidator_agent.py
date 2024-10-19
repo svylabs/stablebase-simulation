@@ -17,6 +17,8 @@ class LiquidatorAgent(BaseAgent):
     def is_under_collateralized(self, agent):
         collateral_value = agent.collateral * self.model.collateral_value
         debt_value = agent.debt
+        if debt_value == 0:
+            return False
         return collateral_value / debt_value < self.model.liquidation_ratio
 
     def liquidate(self, agent):
