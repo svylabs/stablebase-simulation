@@ -68,6 +68,16 @@ class RateGovernorAgent(BaseAgent):
             agent.receive_payment(to_transfer)
             self.transferred += to_transfer
         
+        if self.model.stablecoin_price < 1.0 and random.random() < 0.5:
+            self.pay_fee()
+
+    def pay_fee(self):
+        # Pay 0.001% of the debt as fee
+        fee = 0.001 * self.debt
+        #self.model.stablecoin_price = 1.0
+        self.model.distribute_shielding_fees(fee)
+        self.model.rategovernor_fee_paid += fee
+        
     
     def init_debt(self):
         self.debt = (random.randint(10, 90) * self.collateral * self.model.collateral_value) / 100

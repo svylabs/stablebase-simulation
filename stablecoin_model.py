@@ -31,6 +31,7 @@ class StablecoinModel(Model):
         self.shielding_fees_thirdparty_depositor_agents = 0
         self.yield_rate_governors = 0
         self.yield_thirdparty_depositor_agents = 0
+        self.rategovernor_fee_paid = 0
 
         # Create agents
         agent_id = 0
@@ -75,6 +76,7 @@ class StablecoinModel(Model):
                 "normal_user_debt": "normal_user_debt",
                 "yield_rate_governors": "yield_rate_governors",
                 "yield_thirdparty_depositor_agents": "yield_thirdparty_depositor_agents",
+                "rategovernor_fee_paid": "rategovernor_fee_paid",
             },
             agent_reporters={
                 "AgentType": lambda agent: type(agent).__name__,  # Agent type (RateGovernor, NormalUser, etc.)
