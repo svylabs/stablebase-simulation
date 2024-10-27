@@ -88,7 +88,7 @@ class StabilityPool:
         self.total_stake -= amount
 
     def update_user(self, user):
-        pending_rewards = (self.rewards_per_token - user.reward_snapshot) * user.amount
+        pending_rewards = ((self.rewards_per_token - user.reward_snapshot) * user.amount) / user.cumulative_product_scaling_factor
         user.claimed_rewards += pending_rewards
         pending_collateral = ((self.collateral_per_token  - user.collateral_snapshot ) * user.amount) / user.cumulative_product_scaling_factor
         user.claimed_collateral += pending_collateral
@@ -128,7 +128,7 @@ class StabilityPool:
             pass
 
     def add_reward(self, amount):
-        self.rewards_per_token += (amount * Uint.ONE()) / self.total_stake
+        self.rewards_per_token += (amount * self.stake_scaling_factor) / self.total_stake
 
     def withdraw_reward(self, user):
         if user not in self.stakes:
@@ -190,22 +190,28 @@ pool.unstake(3, userCStake)
 print_pool(pool)
 pool.liquidate(Uint(500, scaled=False), Uint(1, scaled=False))
 print_pool(pool, "After liquidation 1, only 1 stakes 1000 tokens")
+pool.add_reward(Uint(100, scaled=False))
+print_pool(pool, "After 100 token rewards added")
 #print(pool.claim(1))
 #print_pool(pool, "Aftr liquidation, user 1 stake reduced to 500 tokens")
 pool.stake(3, Uint(500, scaled=False))
 print_pool(pool, "After 3 stakes 500 tokens")
 pool.stake(4, Uint(500, scaled=False))
-print_pool(pool, "After 4 stakes 500 tokens, before liquidation")
+print_pool(pool, "After 4 stakes 500 tokens")
+pool.add_reward(Uint(100, scaled=False))
+print_pool(pool, "After 100 token rewards added")
 pool.liquidate(Uint(500, scaled=False), Uint(1, scaled=False))
-print_pool(pool, "After liquidation")
+print_pool(pool, "After liquidation 2(1: 500, 3: 500, 4: 500)")
 #print(pool.claim(1), "After 1 claims")
 #print_pool(pool)
 print(pool.claim(3), "After 3 claims")
-print_pool(pool)
+print_pool(pool, "After 3 claims rewards")
 #print(pool.claim(4), "After 4 claims")
 #print_pool(pool)
 pool.stake(1, Uint(666, scaled=False))
 print_pool(pool, "After 1 stakes 666 tokens")
+pool.add_reward(Uint(100, scaled=False))
+print_pool(pool, "After 100 token rewards added")
 pool.liquidate(Uint(333, scaled=False), Uint(1, scaled=False))
 print_pool(pool, "After liquidation of 333 tokens") # 1000, 333, 333
 print(pool.claim(1), "After 1 claims")
