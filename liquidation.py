@@ -20,6 +20,9 @@ class Uint:
 
     def ONE():
         return Uint(PRECISION)
+    
+    def unscaled(value):
+        return Uint(value, scaled=False)
 
     def __add__(self, other):
         return Uint(self.value + other.value)
@@ -161,9 +164,9 @@ def print_pool(pool, message=""):
 
 pool = StabilityPool()
 
-userAStake = Uint(1000, scaled=False)
-userBStake = Uint(2000, scaled=False)
-userCStake = Uint(1500, scaled=False)
+userAStake = Uint.unscaled(1000)
+userBStake = Uint.unscaled(2000)
+userCStake = Uint.unscaled(1500)
 
 print(userAStake.value, userBStake.value, userCStake.value)
 
@@ -172,7 +175,7 @@ pool.stake(1, userAStake)
 pool.stake(2, userBStake)
 pool.stake(3, userCStake)
 print_pool(pool)
-pool.add_reward(Uint(450, scaled=False))
+pool.add_reward(Uint.unscaled(450))
 print_pool(pool)
 pool.unstake(1, userAStake)
 print_pool(pool)
@@ -184,23 +187,23 @@ pool.stake(1, userAStake)
 print_pool(pool)
 pool.unstake(2, userBStake)
 print_pool(pool)
-pool.add_reward(Uint(100, scaled=False))
+pool.add_reward(Uint.unscaled(100))
 print_pool(pool)
 pool.unstake(3, userCStake)
 print_pool(pool)
-pool.liquidate(Uint(500, scaled=False), Uint(1, scaled=False))
+pool.liquidate(Uint.unscaled(500), Uint.unscaled(1))
 print_pool(pool, "After liquidation 1, only 1 stakes 1000 tokens")
-pool.add_reward(Uint(100, scaled=False))
+pool.add_reward(Uint.unscaled(100))
 print_pool(pool, "After 100 token rewards added")
 #print(pool.claim(1))
 #print_pool(pool, "Aftr liquidation, user 1 stake reduced to 500 tokens")
-pool.stake(3, Uint(500, scaled=False))
+pool.stake(3, Uint.unscaled(500))
 print_pool(pool, "After 3 stakes 500 tokens")
-pool.stake(4, Uint(500, scaled=False))
+pool.stake(4, Uint.unscaled(500))
 print_pool(pool, "After 4 stakes 500 tokens")
-pool.add_reward(Uint(100, scaled=False))
+pool.add_reward(Uint.unscaled(100))
 print_pool(pool, "After 100 token rewards added")
-pool.liquidate(Uint(500, scaled=False), Uint(1, scaled=False))
+pool.liquidate(Uint.unscaled(500), Uint.unscaled(1))
 print_pool(pool, "After liquidation 2(1: 500, 3: 500, 4: 500)")
 #print(pool.claim(1), "After 1 claims")
 #print_pool(pool)
@@ -208,11 +211,11 @@ print(pool.claim(3), "After 3 claims")
 print_pool(pool, "After 3 claims rewards")
 #print(pool.claim(4), "After 4 claims")
 #print_pool(pool)
-pool.stake(1, Uint(666, scaled=False))
+pool.stake(1, Uint.unscaled(666))
 print_pool(pool, "After 1 stakes 666 tokens")
-pool.add_reward(Uint(100, scaled=False))
+pool.add_reward(Uint.unscaled(100))
 print_pool(pool, "After 100 token rewards added")
-pool.liquidate(Uint(333, scaled=False), Uint(1, scaled=False))
+pool.liquidate(Uint.unscaled(333), Uint.unscaled(1))
 print_pool(pool, "After liquidation of 333 tokens") # 1000, 333, 333
 print(pool.claim(1), "After 1 claims")
 print_pool(pool, "After 1 claims")
@@ -220,16 +223,5 @@ print(pool.claim(3), "After 3 claims")
 print_pool(pool, "After 3 claims")
 print(pool.claim(4), "After 4 claims")
 print_pool(pool, "After 4 claims")
-
-
-
-'''
- Liquidation:
-    S0 = 1
-    
- 
-
-'''
-
 
 
