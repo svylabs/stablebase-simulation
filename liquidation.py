@@ -2,7 +2,7 @@ import json
 
 PRECISION = 1e18
 
-def ComplexHandler(Obj):
+def JsonHandler(Obj):
     if hasattr(Obj, '__json__'):
         return Obj.__json__()
     else:
@@ -163,7 +163,7 @@ class StabilityPool:
 def print_pool(pool, message=""):
     print()
     print(message)
-    print(json.dumps(pool, indent=2, default=ComplexHandler))
+    print(json.dumps(pool, indent=2, default=JsonHandler))
 
 
 
