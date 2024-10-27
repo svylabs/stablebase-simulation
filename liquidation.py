@@ -86,13 +86,16 @@ class StabilityPool:
         # cumulative product scaling factor = (1 - A[1] / T[0]) * (1 - A[2] / T[1]) * ... * (1 - A[n] / T[n-1])
         cumulative_product_scaling_factor = (self.stake_scaling_factor * new_scaling_factor) / Uint.ONE()
         self.stake_scaling_factor = cumulative_product_scaling_factor
-        # CG =  (C / T) * (1 - A1 / T0) * (1 - A2 / T1) * ... * (1 - An / Tn-1)
+        # CGPT = CGPT + (C / T) * current_scaling_factor
+        # CGPT =  CGPT + (C / T) * (1 - A1 / T0) * (1 - A2 / T1) * ... * (1 - An / Tn-1)
         self.collateral_per_token += ((collateral * current_scaling_factor) / self.total_stake)
         self.total_stake -= amount
 
     def update_user(self, user):
         pending_rewards = ((self.rewards_per_token - user.reward_snapshot) * user.amount) / user.cumulative_product_scaling_factor
         user.claimed_rewards += pending_rewards
+        # CGPT =  CGPT + (C / T) * (1 - A1 / T0) * (1 - A2 / T1) * ... * (1 - An / Tn-1)
+        # CGNT = (CGPT * user_stake - user.collateral_snapshot * user_stake) /  [ 1 * (1 - A1 / T0) * (1 - A2 / T1) * ... * (1 - Ai / Ti-1) ] where i < n, and i is the ith liquidation after which user staked / reset their stakes
         pending_collateral = ((self.collateral_per_token  - user.collateral_snapshot ) * user.amount) / user.cumulative_product_scaling_factor
         user.claimed_collateral += pending_collateral
         user.reward_snapshot = self.rewards_per_token.clone()
@@ -131,6 +134,8 @@ class StabilityPool:
             pass
 
     def add_reward(self, amount):
+        # RPT = RPT + (R / T) * current_scaling_factor
+        # RPT =  RPT + (R / T) * (1 - A1 / T0) * (1 - A2 / T1) * ... * (1 - An / Tn-1)
         self.rewards_per_token += (amount * self.stake_scaling_factor) / self.total_stake
 
     def withdraw_reward(self, user):
